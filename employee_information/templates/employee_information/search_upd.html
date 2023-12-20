@@ -1,0 +1,84 @@
+{% extends "employee_information/base.html" %}
+{% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Track Booking</h4>
+            <div class="text-start">
+                <input type="text" id="order_no" placeholder="Enter Order Number">
+                <button class="mdc-button mdc-button--raised mdc-ripple-upgraded btn-sm" onclick="searchBookingUpdate()" >    <i class="material-icons mdc-button__icon"        >search</i><span> track</span></button>
+                <!-- // <button onclick="searchBookingUpdate()">Search</button> -->
+                <div id="updateResults"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="5%">
+                    <col width="30%">
+                    <col width="30%">
+                    <col width="30%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1">#</th>
+                        <th class="text-center py-1">Order No</th>
+                        <th class="text-center py-1">Order Update</th>
+                        <th class="text-center py-1">Updated At</th>
+                    </tr>
+                </thead>
+                <tbody id="updateTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchBookingUpdate() {
+        const orderNumber = document.getElementById('order_no').value;
+        const updateTableBody = document.getElementById('updateTableBody');
+
+        $.ajax({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            },
+            url: "{% url 'get_booking_updates' %}",
+            method: 'POST',
+            data: { order_no: orderNumber },
+            dataType: 'json',
+            success: function(response) {
+                updateTableBody.innerHTML = '';
+
+                if (response && response.length > 0) {
+                    response.forEach(function(upd, index) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-2 py-1 text-center">${index + 1}</td>
+                            <td class="px-2 py-1 text-start">${upd.booking__order_no}</td>
+                            <td class="px-2 py-1 text-start">${upd.des}</td>
+                            <td class="px-2 py-1 text-start">${upd.updated_at}</td>
+                        `;
+                        updateTableBody.appendChild(row);
+                    });
+                } else {
+                    const noUpdateRow = document.createElement('tr');
+                    noUpdateRow.innerHTML = `
+                        <td colspan="4" class="px-2 py-1 text-center">No updates found for this order number.</td>
+                    `;
+                    updateTableBody.appendChild(noUpdateRow);
+                }
+            },
+            error: function(err) {
+                console.error('Error occurred:', err);
+            }
+        });
+    }
+</script>
+
+<!-- Other parts of your HTML -->
+
+{% endblock pageContent %}

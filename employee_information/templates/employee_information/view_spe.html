@@ -1,0 +1,61 @@
+{% load humanize %}
+<style>
+    #uni_modal .modal-footer {
+        display: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <dl>
+                <dt class="mdc-typography mdc-theme--primary">Shipper</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.ship }}</dd>
+                
+                <dt class="mdc-typography mdc-theme--primary">POL</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.Pol }}</dd>
+                
+                <dt class="mdc-typography mdc-theme--primary">POFD</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.Pofd }}</dd>
+               
+                <dt class="mdc-typography mdc-theme--primary">POT1</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.Pol2 }}</dd>
+                <dt class="mdc-typography mdc-theme--primary">POT2</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.Pofd2 }}</dd>
+                <dt class="mdc-typography mdc-theme--primary">rate</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.rate }}</dd>
+               
+            </dl>
+        </div>
+        <div class="col-sm-6">
+            <dl>
+                <dt class="mdc-typography mdc-theme--primary">Transaction date</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.tra_date|date:'M d, Y' }}</dd>
+                <dt class="mdc-typography mdc-theme--primary">Transaction Expiey</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.tan_exp|date:'M d, Y' }}</dd>
+                
+                <dt class="mdc-typography mdc-theme--primary">Detention</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.det }}</dd>
+        
+                <dt class="mdc-typography mdc-theme--primary">Customer</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.customer }}</dd>
+                <dt class="mdc-typography mdc-theme--primary">Freight Category</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.freight }}</dd>
+             
+                <dt class="mdc-typography mdc-theme--primary">Agent</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.agent }}</dd>
+               
+               
+                <dt class="mdc-typography mdc-theme--primary">Status</dt>
+                <dd class="ps-3 fw-bolder">
+                    {% if spe.status == 1 %}
+                    <span class="badge bg-primary rounded-pill px-3">Active</span> {% else %}
+                    <span class="badge bg-secondary rounded-pill px-3">Inactive</span> {% endif %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="clear-fix py-3"></div>
+    <div class="d-flex w-100 align-items-center justify-content-end">
+        <button class="btn btn-default border btn-sm rounded-0 d-flex align-items-center" type="button" data-bs-dismiss="modal"><i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">close</i> Close</button>
+    </div>
+</div>

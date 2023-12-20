@@ -1,0 +1,266 @@
+<div class="container-fluid">
+    <form action="" id="booking-form">
+        <input type="hidden" name="id" value="{% if bok.pk %}{{bok.pk}}{% endif %}">
+        <div class="row">
+            <div class="col-md-6">
+              
+                <div class="form-group mb-3">
+                    <label for=" ship" class="control-label">Shipper</label>
+                    <input type="text" name=" ship" id=" ship" class="form-control form-control-sm rounded-0" value="{% if bok.ship %}{{bok.ship}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="  Pol" class="control-label">POL</label>
+                    <input type="text" name="  Pol" id="  Pol" class="form-control form-control-sm rounded-0" value="{% if bok.Pol %}{{bok.Pol}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="  Pofd" class="control-label">POFD</label>
+                    <input type="text" name="  Pofd" id="  Pofd" class="form-control form-control-sm rounded-0" value="{% if bok.Pofd %}{{bok.Pofd}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="   Pot1" class="control-label">POT1</label>
+                    <input type="text" name="   Pot1" id="   Pot1" class="form-control form-control-sm rounded-0" value="{% if bok.Pot1 %}{{bok.Pot1}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="   Pot2" class="control-label">POT2</label>
+                    <input type="text" name="   Pot2" id="   Pot2" class="form-control form-control-sm rounded-0" value="{% if bok.Pot2 %}{{bok.Pot2}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for=" order_no" class="control-label">Order Number</label>
+                    <input type="text" name=" order_no" id="order_no" class="form-control form-control-sm rounded-0" value="{% if bok.order_no %}{{bok.order_no}}{% endif %}" >
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for=" pay" class="control-label">Payment Center</label>
+                    <input type="text" name=" pay" id="pay" class="form-control form-control-sm rounded-0" value="{% if bok.pay %}{{bok.pay}}{% endif %}" >
+                </div>
+                <div class="form-group mb-3">
+                    <label for=" amount" class="control-label">Amount</label>
+                    <input type="number" name=" amount" id=" amount" class="form-control form-control-sm rounded-0" value="{% if bok.amount %}{{bok.amount}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="Booking_date" class="control-label">Booking date</label>
+                    <input type="date" name="Booking_date" id="Booking_date" class="form-control form-control-sm rounded-0" value="{% if bok.Booking_date %}{{ bok.Booking_date|date:'Y-m-d' }}{% endif %}" required>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="Sailing_date" class="control-label">Delivery date</label>
+                    <input type="date" name="Sailing_date" id="Sailing_date" class="form-control form-control-sm rounded-0" value="{% if bok.Sailing_date %}{{ bok.Sailing_date|date:'Y-m-d' }}{% endif %}" required>
+                </div>
+             
+               
+                <div class="form-group mb-3">
+                    <label for=" com" class="control-label">Company</label>
+                    <input type="text" name=" com" id=" com" class="form-control form-control-sm rounded-0" value="{% if bok.com %}{{bok.com}}{% endif %}" required>
+                </div>
+               
+                <div class="form-group mb-3">
+                    <label for="stamp" class="control-label"> Stamp</label>
+                    <input type="file" name="stamp" id="stamp" class="form-control form-control-sm rounded-0" accept="image/*">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label for="customer" class="control-label">Customer</label>
+                    <select name="customer" id="customer" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.customer %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for cust in Cust%}
+                            {% if bok.customer and bok.customer == cust.id %}
+                            <option value="{{ cust.id }}" selected>{{ cust.name }}</option>
+                            {% else %}
+                            <option value="{{ cust.id }}">{{ cust.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="Commodity" class="control-label">Commodity</label>
+                    <select name="Commodity" id="Commodity" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.Commodity %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for com in Com %}
+                            {% if bok.Commodity and bok.Commodity == com.id %}
+                            <option value="{{ com.id }}" selected>{{ com.type }}</option>
+                            {% else %}
+                            <option value="{{ com.id }}">{{ com.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="Carrier" class="control-label">Carrier</label>
+                    <select name="Carrier" id="Carrier" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.Carrier %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for car in Car %}
+                            {% if bok.Carrier and bok.Carrier == car.id %}
+                            <option value="{{ car.id }}" selected>{{ car.type }}</option>
+                            {% else %}
+                            <option value="{{ car.id }}">{{ car.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+               
+                <div class="form-group mb-3">
+                    <label for="freight" class="control-label">Freight Category</label>
+                    <select name="freight" id="freight" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.freight %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for fr in freight %}
+                            {% if bok.freight and bok.freight == fr.id %}
+                            <option value="{{ fr.id }}" selected>{{ fr.type }}</option>
+                            {% else %}
+                            <option value="{{ fr.id }}">{{ fr.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="cntr_owner" class="control-label">Contracy Owner</label>
+                    <select name="cntr_owner" id="cntr_owner" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.cntr_owner %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for con in Con %}
+                            {% if bok.cntr_owner and bok.cntr_owner == con.id %}
+                            <option value="{{ con.id }}" selected>{{ con.type }}</option>
+                            {% else %}
+                            <option value="{{ con.id }}">{{ con.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="agent" class="control-label">Agent</label>
+                    <select name="agent" id="agent" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.agent %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for ag in Ag %}
+                            {% if bok.agent and bok.agent == ag.id %}
+                            <option value="{{ ag.id }}" selected>{{ ag.name }}</option>
+                            {% else %}
+                            <option value="{{ ag.id }}">{{ ag.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="vessel" class="control-label">Vessel</label>
+                    <select name="vessel" id="vessel" class="form-select form-select-sm rounded-0" required>
+                        {% if not bok.vessel %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for ves in Ves %}
+                            {% if bok.vessel and bok.vessel == ves.id %}
+                            <option value="{{ ves.id }}" selected>{{ ves.type }}</option>
+                            {% else %}
+                            <option value="{{ ves.id }}">{{ ves.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+
+
+
+                <div class="form-group mb-3">
+                    <label for="status" class="control-label">Status</label>
+                    <select name="status" id="status" class="form-select form-select-sm rounded-0" required>
+                        {% if bok.status == 1 %}
+                        <option value="1" selected >Active</option>
+                        {% else %}
+                        <option value="1" >Active</option>
+                        {% endif %}
+            
+                        {% if bok.status == 0 %}
+                        <option value="0" selected>Inactive</option>
+                        {% else %}
+                        <option value="0">Inactive</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#booking-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-booking-page' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.reload()
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>

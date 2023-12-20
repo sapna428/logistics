@@ -1,0 +1,113 @@
+<div class="container-fluid">
+    <form action="" id="curex-form">
+        <input type="hidden" name="id" value="{% if cur.pk %}{{cur.pk}}{% endif %}">
+        <div class="form-group mb-3">
+            <label for="fom" class="control-label">Currency From</label>
+            <input type="text" name="fom" id="fom" class="form-control form-control-sm rounded-0" value="{% if cur.fom %}{{cur.fom}}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="to" class="control-label">Currency To</label>
+            <input type="text" name="to" id="to" class="form-control form-control-sm rounded-0" value="{% if cur.to %}{{cur.to}}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="rate" class="control-label"> Exchange Rate</label>
+            <input type="number" name="rate" id="rate" class="form-control form-control-sm rounded-0" value="{% if cur.rate %}{{cur.rate}}{% endif %}" required>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="amount" class="control-label">Amount</label>
+            <input type="number" name="amount" id="amount" class="form-control form-control-sm rounded-0" value="{% if cur.amount %}{{cur.amount}}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="total" class="control-label">Rate</label>
+            <input type="number" name="total" id="total" class="form-control form-control-sm rounded-0" value="{% if cur.total %}{{cur.total}}{% endif %}" required>
+        </div>
+
+
+        <div class="form-group mb-3">
+            <label for="status" class="control-label">Status</label>
+            <select name="status" id="status" class="form-control form-control-sm rounded-0" required>
+            {% if cur.status and cur.status == 1 %}
+            <option value="1" selected>Active</option>
+            {% else %}
+            <option value="1">Active</option>
+            {% endif %}
+
+            {% if cur.status and cur.status == 0 %}
+            <option value="0" selected>Inactive</option>
+            {% else %}
+            <option value="0">Inactive</option>
+            {% endif %}
+        </select>
+        </div>
+    </form>
+</div>
+<script>
+    // Function to calculate total and update the 'total' input field
+    function calculateTotal() {
+        const rate = parseFloat(document.getElementById('rate').value) || 0;
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
+        const total = rate * amount;
+
+        document.getElementById('total').value = total.toFixed(2); // Update the 'total' field
+    }
+
+    // Attach an event listener to the rate and amount fields
+    document.getElementById('rate').addEventListener('input', calculateTotal);
+    document.getElementById('amount').addEventListener('input', calculateTotal);
+
+    // Your existing AJAX form submission code here
+    // ...
+
+</script>
+<script>
+    $(function() {
+        $('#curex-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-curex-page' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.reload()
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>

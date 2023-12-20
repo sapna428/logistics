@@ -1,0 +1,60 @@
+{% load humanize %}
+<style>
+    #uni_modal .modal-footer {
+        display: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <dl>
+                <dt class="mdc-typography mdc-theme--primary">Shipper</dt>
+                <dd class="ps-3 fw-bolder">{{ spe.ship }}</dd>
+                
+                <dt class="mdc-typography mdc-theme--primary">PORT</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.port }}</dd>
+                     
+                <dt class="mdc-typography mdc-theme--primary">Amount</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.amount }}</dd>
+                     
+                <dt class="mdc-typography mdc-theme--primary">Company</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.com }}</dd>
+                <dt class="mdc-typography mdc-theme--primary">Payment Center</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.payment_center }}</dd>
+                <dt class="mdc-typography mdc-theme--primary"> Invoice Date</dt>
+                <dd class="ps-3 fw-bolder">{{ bin. invoice_date|date:'M d, Y' }}</dd>
+                
+                <dt class="mdc-typography mdc-theme--primary">Transaction Date</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.trans_date|date:'M d, Y' }}</dd>
+                
+                
+                
+                
+        
+            </dl>
+        </div>
+        <div class="col-sm-6">
+            <dl>
+                <dt class="mdc-typography mdc-theme--primary">Customer</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.customer }}</dd>
+                <dt class="mdc-typography mdc-theme--primary">Settlement Type</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.set_type }}</dd>
+             
+                <dt class="mdc-typography mdc-theme--primary">Booking ID</dt>
+                <dd class="ps-3 fw-bolder">{{ bin.sale_id }}</dd>
+               
+               
+                <dt class="mdc-typography mdc-theme--primary">Status</dt>
+                <dd class="ps-3 fw-bolder">
+                    {% if bin.status == 1 %}
+                    <span class="badge bg-primary rounded-pill px-3">Active</span> {% else %}
+                    <span class="badge bg-secondary rounded-pill px-3">Inactive</span> {% endif %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="clear-fix py-3"></div>
+    <div class="d-flex w-100 align-items-center justify-content-end">
+        <button class="btn btn-default border btn-sm rounded-0 d-flex align-items-center" type="button" data-bs-dismiss="modal"><i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">close</i> Close</button>
+    </div>
+</div>

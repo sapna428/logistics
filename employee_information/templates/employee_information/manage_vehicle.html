@@ -1,0 +1,132 @@
+<div class="container-fluid">
+    <form action="" id="vehicle-form">
+        <input type="hidden" name="id" value="{% if veh.pk %}{{veh.pk}}{% endif %}">
+       
+        <div class="form-group mb-3">
+            <label for="vehicle_number" class="control-label">Vehicle Number</label>
+            <input type="text" name="vehicle_number" id="vehicle_number" class="form-control form-control-sm rounded-0" value="{% if veh.vehicle_number %}{{veh.vehicle_number}}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="size" class="control-label">Size</label>
+            <input type="text" name="size" id="size" class="form-control form-control-sm rounded-0" value="{% if veh.size %}{{veh.size}}{% endif %}" required>
+        </div>
+
+        <!-- <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="vehicle_id" class="control-label">Vehicle Category</label>
+                <select name="vehicle_id" id="vehicle_id" class="form-select form-select-sm rounded-0" required>
+                    {% if not veh.vehicle_id %}
+                    <option value="1" disabled selected>Please Select Here</option>
+                    {% else %}
+                    <option value="1" disabled>Please Select Here</option>
+                    {% endif %}
+                    {% for cat in Veh %}
+                        {% if veh.vehicle_id and veh.vehicle_id  ==  cat.id %}
+                        <option value="{{ cat.id }}" selected>{{ cat.type }}</option>
+                        {% else %}
+                        <option value="{{ cat.id }}">{{cat.type }}</option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select> -->
+        
+                <div class="form-group mb-3">
+                    <label for="vehicle_id" class="control-label">Vehicle Category</label>
+                    <select name="vehicle_id" id="vehicle_id" class="form-select form-select-sm rounded-0" required>
+                        {% if not veh.vehicle_id     %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for cat in Veh %} 
+                     
+                            {% if veh.vehicle_id and veh.vehicle_id == cat.id %}
+                            <option value="{{ cat.id }}" selected>{{ cat.type }}</option>
+                            {% else %}
+                            <option value="{{ cat.id }}">{{ cat.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+
+        <div class="form-group mb-3">
+            <label for="capacity" class="control-label">Capacity</label>
+            <input type="number" name="capacity" id="capacity" class="form-control form-control-sm rounded-0" value="{% if veh.capacity%}{{veh.capacity}}{% endif %}" required>
+        </div>
+        
+
+
+
+
+        <div class="form-group mb-3">
+            <label for="status" class="control-label">Status</label>
+            <select name="status" id="status" class="form-control form-control-sm rounded-0" required>
+            {% if veh.status and veh.status == 1 %}
+            <option value="1" selected>Active</option>
+            {% else %}
+            <option value="1">Active</option>
+            {% endif %}
+
+            {% if veh.status and veh.status == 0 %}
+            <option value="0" selected>Inactive</option>
+            {% else %}
+            <option value="0">Inactive</option>
+            {% endif %}
+        </select>
+        </div>
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#vehicle-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-vehicle-page' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.reload()
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>

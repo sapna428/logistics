@@ -1,0 +1,163 @@
+<div class="container-fluid">
+    <form action="" id="pursol-form">
+        <input type="hidden" name="id" value="{% if purs.pk %}{{purs.pk}}{% endif %}">
+        <div class="row">
+            <div class="col-md-6">
+              
+                
+                <div class="form-group mb-3">
+                    <label for="slot_start" class="control-label">Slot Start Time</label>
+                    <input type="Time" name="slot_start" id="slot_start" class="form-control form-control-sm rounded-0" value="{% if purs.slot_start %}{{ purs.slot_start }}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for=" slot_end" class="control-label">Slot End Time</label>
+                    <input type="Time" name="slot_end" id=" slot_end" class="form-control form-control-sm rounded-0" value="{% if purs.slot_end %}{{purs.slot_end}}{% endif %}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for=" rate" class="control-label">Rate</label>
+                    <input type="number" name="rate" id=" rate" class="form-control form-control-sm rounded-0" value="{% if purs.rate%}{{purs.rate}}{% endif %}" required>
+                </div>
+               
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label for="set_type" class="control-label">Settlement</label>
+                    <select name="set_type" id="set_type" class="form-select form-select-sm rounded-0" required>
+                        {% if not purs.set_type %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for set in Set %} 
+                            {% if purs.set_type and purs.set_type == set.id %}
+                            <option value="{{ set.id }}" selected>{{ set.type }}</option>
+                            {% else %}
+                            <option value="{{ set.id }}">{{ set.type }}</option>
+                            {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+              
+              
+               
+
+              
+          
+
+                <!-- <div class="form-group mb-3">
+                    <label for="pur_id" class="control-label">Container ID</label>
+                    <select name="pur_id" id="pur_id" class="form-select form-select-sm rounded-0" required>
+                        {% if not purs.pur_id %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for veh in Vehi %}
+                        {% if purs.pur_id and purs.pur_id == veh.id %}
+                        <option value="{{ veh.id }}" selected>{{ veh.vehicle_number }}</option>
+                        {% else %}
+                        <option value="{{ veh.id }}">{{ veh.vehicle_number }}</option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+            </div>
+          
+
+              
+
+                 -->
+                 <div class="form-group mb-3">
+                    <label for="con_id" class="control-label">Container ID</label>
+                    <select name="con_id" id="con_id" class="form-select form-select-sm rounded-0" required>
+                        {% if not purs.con_id %}
+                        <option value="1" disabled selected>Please Select Here</option>
+                        {% else %}
+                        <option value="1" disabled>Please Select Here</option>
+                        {% endif %}
+                        {% for veh in Vehi %}
+                        {% if purs.con_id and purs.con_id == veh.id %}
+                        <option value="{{ veh.id }}" selected>{{ veh.vehicle_number }}</option>
+                        {% else %}
+                        <option value="{{ veh.id }}">{{ veh.vehicle_number }}</option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+            </div>
+          
+
+
+
+                <div class="form-group mb-3">
+                    <label for="status" class="control-label">Status</label>
+                    <select name="status" id="status" class="form-select form-select-sm rounded-0" required>
+                        {% if purs.status == 1 %}
+                        <option value="1" selected >Active</option>
+                        {% else %}
+                        <option value="1" >Active</option>
+                        {% endif %}
+            
+                        {% if purs.status == 0 %}
+                        <option value="0" selected>Inactive</option>
+                        {% else %}
+                        <option value="0">Inactive</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#pursol-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-pursol-page' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.reload()
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>

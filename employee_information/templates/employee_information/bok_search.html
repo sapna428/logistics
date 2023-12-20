@@ -1,0 +1,129 @@
+{% extends "employee_information/base.html" %}
+{% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0"> Booking Invoice</h4>
+            <form action="{% url 'generate_booking_invoice' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="order_no" value="{{ order_no }}">
+                <button  class="mdc-button mdc-button--raised mdc-ripple-upgraded btn-sm" type="submit"  ><i class="material-icons mdc-button__icon">download</i><span> Invoice</span></button>
+                <!-- <button type="submit">Generate PDF</button> -->
+            </form>
+            <!-- <a class="btn btn-primary" href="{% url 'generate_booking_invoice' %}" role="button">Download Invoice                </a> -->
+        
+            <div class="text-start">
+                <input type="text" id="order_no" placeholder="Enter Order Number">
+                <button class="mdc-button mdc-button--raised mdc-ripple-upgraded btn-sm"  onclick="searchBooking()" ><i class="material-icons mdc-button__icon">search</i><span> Search</span></button>
+                <!-- <button onclick="searchBooking()">Search</button> -->
+                <div id="updateResults"></div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="25%">
+                    <col width="10%">
+                    <col width="10%">
+                 
+                    <col width="10%">
+                    <col width="30%">
+                   
+                    <col width="30%">
+                    <col width="10%">
+                    <col width="30%">
+                    <col width="30%">
+                    
+                    <col width="30%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <!-- Add your table headers here -->
+                        <!-- Example: -->
+                        <th class="text-center py-1">Order No</th>
+                        <th class="text-center py-1">Customer</th>
+                        <th class="text-center py-1">Commodity</th>
+                        <th class="text-center py-1">Company</th>
+                       
+                        <th class="text-center py-1">POL</th>
+                        <th class="text-center py-1">POFD</th>
+                        <th class="text-center py-1">Amount</th>
+                        <th class="text-center py-1">Booking Date</th>
+                        <th class="text-center py-1">Delivery Date</th>
+
+
+                        <th class="text-center py-1">Stamp</th>
+                        <!-- <th class="text-center py-1">Status</th> -->
+                   
+                    </tr>
+                </thead>
+                <!-- Table body to display search results -->
+                <tbody id="searchResults"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchBooking() {
+        const orderNumber = document.getElementById('order_no').value;
+        // const orderNumber = document.getElementById('order_no').value.trim();
+        // const csrftoken = getCookie('csrftoken');
+        const searchResults= document.getElementById('searchResults');
+        $.ajax({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            },
+            url: "{% url 'get_booking_invoice' %}",
+            method: 'POST',
+            data: { order_no: orderNumber },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                // const searchResults = document.getElementById('searchResults');
+                searchResults.innerHTML = '';
+
+                if (response && response.length > 0) {
+                    response.forEach(function(bok) {
+                        // Create a table row for each matching record and populate the columns
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+
+                        <td class="px-2 py-1 text-start">${ bok.order_no}</td>
+                        <td class="px-2 py-1 text-start">${ bok.customer__name}</td>
+                        <td class="px-2 py-1 text-start">${ bok.Commodity__type}</td>
+                        <td class="px-2 py-1 text-start">${ bok.com}</td>
+                        <td class="px-2 py-1 text-start">${ bok.Pol}</td>
+                        <td class="px-2 py-1 text-start">${ bok.Pofd}</td>
+                        <td class="px-2 py-1 text-start">${ bok.amount}</td>
+                   
+                        <td class="px-2 py-1 text-start">${ bok.Booking_date}</td>
+                        <td class="px-2 py-1 text-start">${ bok.Sailing_date}</td>
+                        <td class="px-2 py-1 text-center">
+                    ${bok.stamp ? `<img src="${bok.stamp}" alt="Stamp Image" style="max-width: 40px; max-height: 40px;">` : 'No image uploaded'}
+                </td>
+                  
+                            <!-- Add other fields to display -->
+                        `;
+                        searchResults.appendChild(row);
+                    });
+                } else {
+                    // If no records found, display a message
+                    const noRecordRow = document.createElement('tr');
+                    noRecordRow.innerHTML = `<td colspan="2">No records found</td>`;
+                    searchResults.appendChild(noRecordRow);
+                }
+            },
+            error: function(err) {
+                console.error('Error occurred:', err);
+            }
+        });
+    }
+   
+</script>
+{% endblock pageContent %}

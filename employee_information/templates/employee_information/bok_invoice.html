@@ -1,0 +1,147 @@
+{% extends "employee_information/base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Booking Invoice</h4>
+            <div class="text-start">
+                <button class="mdc-button mdc-button--raised mdc-ripple-upgraded btn-sm" id="create_new"><i class="material-icons mdc-button__icon">add</i><span> Add Booking Invoice</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="3%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%"> 
+                    <col width="15%"> 
+                    <col width="15%"> 
+                    <col width="15%"> 
+                    <col width="15%">
+                     <!-- <col width="15%"> -->
+                      <col width="15%"> 
+                      <col width="15%"> 
+                      <col width="15%">
+                      <col width="20%">
+                     
+                    
+                   
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1">#</th>
+                        <th class="text-center py-1">Booking ID</th>
+                        <th class="text-center py-1">Settlement Type</th>
+                        <th class="text-center py-1">Customer</th>
+                        <th class="text-center py-1">Commodity</th>
+                        <th class="text-center py-1">Amount</th>
+                    
+                        <th class="text-center py-1">PORT</th>
+                        <!-- <th class="text-center py-1">Payment Center</th> -->
+                      
+                        <th class="text-center py-1">Transaction Date</th>
+                        <th class="text-center py-1">Invoice Date</th>
+
+
+                        <th class="text-center py-1">Stamp</th>
+                        <th class="text-center py-1">Status</th>
+                        <th class="text-center py-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bin in Bin %} 
+                    <tr>
+                        <td class="px-2 py-1 text-center">{{ forloop.counter }}</td>
+                        <td class="px-2 py-1 text-start">{{ bin.sale_id.order_no}}</td>
+                        <!-- <td class="px-2 py-1 text-start">{{ bin.set_type.type}}</td> -->
+                        <td class="px-2 py-1 text-start">{{ bin.customer.name}}</td>
+                        <td class="px-2 py-1 text-start">{{ bin.Commodity.type}}</td>
+                        <td class="px-2 py-1 text-start">{{ bin.amount}}</td>
+                        <td class="px-2 py-1 text-start">{{ bin.port}}</td>
+                        <td class="px-2 py-1 text-start">{{ bin.payment_center}}</td>
+                     
+                   
+                        <td class="px-2 py-1 text-start">{{ bin.trans_date}}</td>
+                        <td class="px-2 py-1 text-start">{{ bin.invoice_date}}</td>
+                 
+                       
+                        <td class="px-2 py-1 text-center">
+                            {% if bin.stamp %}
+                                <img src="{{ bin.stamp.url }}" alt="Stamp Image" style="max-width: 40px; max-height: 40px;">
+                            {% else %}
+                                No image uploaded
+                            {% endif %}
+                        </td>
+                        <td class="px-2 py-1 text-center">
+                            {% if bin.status == 1 %}
+                            <span class="badge bg-primary rounded-pill px-3">Active</span> {% else %}
+                            <span class="badge bg-secondary rounded-pill px-3">Inactive</span> {% endif %}
+                        </td>
+                        <td class="px-2 py-1 text-center">
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded edit-data" type="button" data-id="{{ bin.pk }}" title="Edit">
+                                <i class="material-icons mdc-button__icon">edit</i>
+                            </button>
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="{{ bin.pk }}" title="Delete">
+                                <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            </button>
+                            <button class="mdc-button mdc-button--raised p-1 icon-button mdc-ripple-upgraded view-data" type="button" data-id="{{ bin.pk }}" title="View Details">
+                                <i class="material-icons mdc-button__icon">visibility</i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('#create_new').click(function() {
+            uni_modal("Add Booking Invoice", "{% url 'manage_bin-page' %}")
+        })
+        $('.edit-data').click(function() {
+            uni_modal("Edit Booking Invoice", "{% url 'manage_bin-page' %}?id=" + $(this).attr('data-id'))
+        })
+        $('.view-data').click(function() {
+            uni_modal("Booking Invoice Details", "{% url 'view-bin-page' %}?id=" + $(this).attr('data-id'), 'mid-large')
+        })
+        $('.delete-data').click(function() {
+            _conf("Are you sure to delete this Booking Invoice?", "delete_bin", [$(this).attr('data-id')])
+        })
+    })
+
+    function delete_bin($id) {
+        start_loader();
+        $.ajax({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            },
+            url: "{% url 'delete-bin' %}",
+            method: "POST",
+            data: {
+                id: $id
+            },
+            dataType: "json",
+            error: err => {
+                console.log(err)
+                alert_toast("An error occured.", 'error');
+                end_loader();
+            },
+            success: function(resp) {
+                if (typeof resp == 'object' && resp.status == 'success') {
+                    location.reload();
+                } else {
+                    alert_toast("An error occured.", 'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+</script>
+{% endblock ScriptBlock %}

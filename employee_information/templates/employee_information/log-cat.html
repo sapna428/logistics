@@ -1,0 +1,229 @@
+{% extends "employee_information/base.html" %} {% load humanize %} {% block pageContent %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+<!-- Boxicons -->
+<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+<!-- My CSS -->
+
+
+
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
+crossorigin="anonymous"
+/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+
+
+
+
+
+
+
+
+
+ #content main .box-info {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	grid-gap: 24px;
+	margin-top: 36px;
+}
+#content main .box-info li {
+	padding: 24px;
+	background:#2c0031 ;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	grid-gap: 24px;
+}
+#content main .box-info li .bx {
+	width: 80px;
+	height: 80px;
+	border-radius: 10px;
+	font-size: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#content main .box-info li:nth-child(1) .bx {
+	background: var(--light-blue);
+	color: var(--blue);
+} 
+
+
+</style>
+
+<style>
+    .btn {
+    width: 150px; /* Set the width */
+    height: 50px; /* Set the height */
+}
+
+    .btn-primary {
+        background: #58298a;
+        color: white !important;
+        border-color: #58298a;
+        transition: background-color 0.3s ease, color 0.3s ease; /* Add transition for smooth effect */
+        /* Add other button styles */
+    }
+
+    .btn-primary:hover {
+        background: #7a4bd9; /* Change background color on hover */
+        color: white; /* Change text color on hover */
+        /* Add other styles for hover state */
+    }
+
+</style>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logistics Menu</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+
+
+    <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+        <div class="mdc-card">
+            <div class="d-flex justify-content-between">
+                <h4 class="card-title mb-0">Logistics Menu</h4>
+                <!-- <a class="btn btn-primary" href="{% url 'booking-page' %}" role="button">Booking</a>
+                <a class="btn btn-primary" href="{% url 'upd-page' %}" role="button">Booking Updates</a> -->
+            </div>
+        </div>
+    </div>
+    <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+        <div class="mdc-card info-card info-card--success">
+            <div class="card-inner">
+                <h5 class="card-title">Freight category</h5>
+          
+                <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_veh|intcomma }}</h5>
+                <p class="tx-12 text-muted"> <a href= "{% url 'freight_Category-page' %}">Over All Count of Freight categorys </a></p>
+                <div class="card-icon-wrapper">
+                    <i class='bx bxs-shopping-bags' ></i>
+                     <!-- <i class="material-icons">business</i> -->
+                </div>
+            </div>
+        </div>
+    </div> 
+     
+     <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+        <div class="mdc-card info-card info-card--info">
+            <div class="card-inner">
+                <h5 class="card-title">Carrier</h5>
+                <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_employee|intcomma }}</h5>
+                <p class="tx-12 text-muted"> <a href= "{% url 'carrier-page' %}">Over All Count of Carriers </a></p>
+                <div class="card-icon-wrapper">
+                    <!-- <i class=' bx bx-user' ></i> -->
+                     <i class="material-icons">category</i>
+                </div>
+            </div>
+        </div> 
+     </div> 
+
+
+     <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+        <div class="mdc-card info-card info-card--info">
+            <div class="card-inner">
+                <h5 class="card-title">Vessel</h5>
+                <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_cat|intcomma }}</h5>
+                <p class="tx-12 text-muted"> <a href= "{% url 'vessel-page' %}">Over All Count of Vessel</a></p>
+                <div class="card-icon-wrapper">
+                    <!-- <i class=' bx bx-user' ></i> -->
+                     <i class="material-icons">format_list_bulleted</i>
+                </div>
+            </div>
+        </div> 
+     </div> 
+
+
+
+
+     <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+        <div class="mdc-card info-card info-card--info">
+            <div class="card-inner">
+                <h5 class="card-title">Contract Owner</h5>
+                <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_exp|intcomma }}</h5>
+                <p class="tx-12 text-muted"> <a href= "{% url 'contract-page' %}">Over All Count of Contrct Owner</a></p>
+                <div class="card-icon-wrapper">
+            
+                     <i class="material-icons">supervisor_account</i>
+                </div>
+            </div>
+        </div> 
+     </div> 
+
+
+     <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+        <div class="mdc-card info-card info-card--info">
+            <div class="card-inner">
+                <h5 class="card-title">Currency Exchange</h5>
+                <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_cur|intcomma }}</h5>
+                <p class="tx-12 text-muted"> <a href= "{% url 'curex-page' %}">Over All Count of Currency Exchange</a></p>
+                <div class="card-icon-wrapper">
+                    <!-- <i class=' bx bx-user' ></i> -->
+                     <i class="material-icons">attach_money</i>
+                </div>
+            </div>
+        </div> 
+     </div> 
+
+
+
+
+
+
+
+
+
+
+     <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+        <div class="mdc-card info-card info-card--info">
+            <div class="card-inner">
+                <h5 class="card-title">Settlement Category</h5>
+                <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_set|intcomma }}</h5>
+                <p class="tx-12 text-muted"> <a href= "{% url 'set-page' %}">Over All Count of Settlement Category</a></p>
+                <div class="card-icon-wrapper">
+                    <!-- <i class=' bx bx-user' ></i> -->
+                     <i class="material-icons">widgets</i>
+                </div>
+            </div>
+        </div> 
+     </div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+{% endblock pageContent %}

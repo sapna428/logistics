@@ -1,0 +1,149 @@
+{% extends "employee_information/base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Booking</h4>
+            <a class="btn btn-primary" href="{% url 'bok_csv-page' %}" role="button"> Generate CSV</a>
+             <a class="btn btn-primary" href="{% url 'bok_pdf-page' %}" role="button"> Generate Invoice</a> 
+            <div class="text-start">
+                <button class="mdc-button mdc-button--raised mdc-ripple-upgraded btn-sm" id="create_new"><i class="material-icons mdc-button__icon">add</i><span> Add Booking</span></button>
+                <a class="btn btn-primary" href="{% url 'get_booking_invoice' %}" role="button">Booking Invoice              </a>
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="3%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%"> 
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%"> 
+                    <col width="15%">
+                     <col width="15%">
+                      <col width="15%"> 
+                      <col width="15%"> 
+                      <col width="15%">
+                      <col width="20%">
+                     
+                    
+                   
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1">#</th>
+                        <th class="text-center py-1">Order No</th>
+                        <th class="text-center py-1">Customer</th>
+                        <th class="text-center py-1">Commodity</th>
+                        <th class="text-center py-1">Company</th>
+                    
+                        <th class="text-center py-1">POL</th>
+                        <th class="text-center py-1">POFD</th>
+                        <th class="text-center py-1">Amount</th>
+                        <th class="text-center py-1">Booking Date</th>
+                        <th class="text-center py-1">Delivery Date</th>
+
+
+                        <th class="text-center py-1">Stamp</th>
+                        <th class="text-center py-1">Status</th>
+                        <th class="text-center py-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bok in Bok %} 
+                    <tr>
+                        <td class="px-2 py-1 text-center">{{ forloop.counter }}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.order_no}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.customer.name}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.Commodity.type}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.com}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.Pol}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.Pofd}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.amount}}</td>
+                   
+                        <td class="px-2 py-1 text-start">{{ bok.Booking_date}}</td>
+                        <td class="px-2 py-1 text-start">{{ bok.Sailing_date}}</td>
+                 
+                       
+                        <td class="px-2 py-1 text-center">
+                            {% if bok.stamp %}
+                                <img src="{{ bok.stamp.url }}" alt="Stamp Image" style="max-width: 40px; max-height: 40px;">
+                            {% else %}
+                                No image uploaded
+                            {% endif %}
+                        </td>
+                        <td class="px-2 py-1 text-center">
+                            {% if bok.status == 1 %}
+                            <span class="badge bg-primary rounded-pill px-3">Active</span> {% else %}
+                            <span class="badge bg-secondary rounded-pill px-3">Inactive</span> {% endif %}
+                        </td>
+                        <td class="px-2 py-1 text-center">
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded edit-data" type="button" data-id="{{ bok.pk }}" title="Edit">
+                                <i class="material-icons mdc-button__icon">edit</i>
+                            </button>
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="{{ bok.pk }}" title="Delete">
+                                <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            </button>
+                            <button class="mdc-button mdc-button--raised p-1 icon-button mdc-ripple-upgraded view-data" type="button" data-id="{{ bok.pk }}" title="View Details">
+                                <i class="material-icons mdc-button__icon">visibility</i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('#create_new').click(function() {
+            uni_modal("Add Booking", "{% url 'manage_booking-page' %}")
+        })
+        $('.edit-data').click(function() {
+            uni_modal("Edit Booking", "{% url 'manage_booking-page' %}?id=" + $(this).attr('data-id'))
+        })
+        $('.view-data').click(function() {
+            uni_modal("Booking Details", "{% url 'view-booking-page' %}?id=" + $(this).attr('data-id'), 'mid-large')
+        })
+        $('.delete-data').click(function() {
+            _conf("Are you sure to delete this Booking?", "delete_booking", [$(this).attr('data-id')])
+        })
+    })
+
+    function delete_booking($id) {
+        start_loader();
+        $.ajax({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            },
+            url: "{% url 'delete-booking' %}",
+            method: "POST",
+            data: {
+                id: $id
+            },
+            dataType: "json",
+            error: err => {
+                console.log(err)
+                alert_toast("An error occured.", 'error');
+                end_loader();
+            },
+            success: function(resp) {
+                if (typeof resp == 'object' && resp.status == 'success') {
+                    location.reload();
+                } else {
+                    alert_toast("An error occured.", 'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+</script>
+{% endblock ScriptBlock %}

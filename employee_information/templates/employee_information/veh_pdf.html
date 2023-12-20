@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+  
+<head>
+  
+
+  
+</head>
+
+<body>
+  
+    
+    <!-- <img src="{% static 'logo.png' %}" alt="logo" style="height: 60px; width: 200px;"> -->
+ 
+    <style>
+        .container{
+            position: relative;
+
+        }
+       .logo{
+         position :absolute;
+         top:10px;
+         right: 10px;
+        
+       }
+       table {
+           border-collapse: collapse;
+           width: 100%;
+         }
+         
+         th, td {
+           padding: 8px;
+           text-align: left;
+           border-bottom: 1px solid #DDD;
+         }
+         
+         tr:hover {background-color: #D6EEEE;}
+       </style>
+
+<style>
+@page {
+   size: a4 landscape;
+   @frame header_frame {           /* Static Frame */
+       -pdf-frame-content: header_content;
+       left: 70pt; width: 512pt; top: 50pt; height: 40pt;
+   }
+   @top-left{}
+      /* {% load static %}
+       {% static 'truck.png' % };
+    height: 60px;
+width:100px;}  */
+   @frame content_frame {          /* Content Frame */
+       left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+   }
+   @frame footer_frame {           /* Another static Frame */
+       -pdf-frame-content: footer_content;
+       left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+   }
+   @bottom-right{
+       color:purple;
+font-size: 1.25rem;
+font-weight: bold;
+       content:" Page " counter(page)" of "counter(pages);
+       
+       {% comment %} content:" LTV Tracking System "; {% endcomment %}
+   }
+   @bottom-left{
+        color:purple;
+font-size: 1.25rem;
+font-weight: bold; 
+ 
+       content:" LTV Tracking System "; 
+   }
+}
+</style>
+<img src="{% static 'images/123.png' %}" alt="logo" style="height: 200px; width: 300px;">
+
+<center>
+<h1 style=color:purple; > <b> LTV Tracking System</b></h1>
+        <h3 style=color:rgb(7, 7, 7);> <b> Address: Shara e Faisal Karachi</b></h3>
+        <h3 style=color: rgb(7, 7, 7);> <b> Email: Info@softicsolutions
+</b> </h3>
+<h3 style=color: rgb(7, 7, 7);> <b> Phone: +92-40-4305001-4305002
+</b> </h3>
+
+
+           </center>
+
+    <!-- HTML Content -->
+    <hr style= color='black' size='6'>
+    <h2>  <b>   Vehicle Details </b></h2>
+    </hr>
+    <hr>
+    </hr>
+    <table class="table">
+    <thead class="thead">
+         <tr style="background-color:purple; color:white" height = "40%">
+   
+            <th > ID</th>
+            <th > Vehicle Number </th>
+            <th >Type</th>
+            <th >Capacity</th>
+            <th >Size</th>
+            
+            
+    </tr>
+    </thead>
+    <tbody>
+    {% for veh in veh%}
+    <tr>
+        <td>     {{forloop.counter }}</td> 
+                                <td>     {{ veh.vehicle_number}}</td> 
+							
+                                <td>     {{ veh.vehicle_id.type}}</td> 
+                                <td>     {{ veh.capacity}}</td> 
+                                <td>     {{ veh.size}}</td> 
+                              
+                           
+							
+          
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table> 
+    
+</body>
+</html>
