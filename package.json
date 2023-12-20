@@ -1,3 +1,16 @@
 {
-    "name": "ems"
+    "name": "ems",
+    "version": "3.10.0",
+    "description": "Django project with associated Python dependencies",
+    "scripts": {
+      "start": "echo 'No start script defined'"
+  
+    },
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+   
+      "some-node-package": "^1.0.0"
+    }
   }
+  
