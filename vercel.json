@@ -1,8 +1,8 @@
 {
-    "builds":[{
-        "src":"ems/wsgi.py",
-        "use":" @vercel/python",
-        "config":{"maxLambdaSize": "15mb","runtime":"python 3.10.0"}
+    "builds": [{
+        "src": "ems/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.10" }
     }],
     "routes": [
         {
@@ -10,5 +10,4 @@
             "dest": "ems/wsgi.py"
         }
     ]
-
 }
