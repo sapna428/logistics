@@ -15,7 +15,7 @@ urlpatterns = [
     path('logout', views.logoutuser, name="logout"),
     # path('about', views.about, name="about-page"),
     path ('register', views.registerpage, name="registerpage"),
-    path ('', views.loginpage, name="loginpage"),
+    path ('log', views.loginpage, name="loginpage"),
 
 #################################################################################################
   #################################### Vehicle Category   #########################################
@@ -215,7 +215,7 @@ path('save_contract', views.save_concategory, name="save-concategory-page"),
 
    path('con_menu/', views.con_menu, name="con_menu"),
     path('log_cat', views.log_cat, name="log_cat"),
-
+ path('', views.main, name="main"),
     path('emp_cat', views.emp_cat, name="emp_cat"),
 ##########################################    Vehicle         ################################################################
    path('save_vehicle', views.save_vehicle, name="save-vehicle-page"),

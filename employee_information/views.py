@@ -141,6 +141,21 @@ def home(request):
     }
     return render(request, 'employee_information/home.html',context)
 
+@login_required
+def main(request):
+    context = {
+        'page_title':'Logistics',
+        'employees':employees,
+     
+        'total_employee':len(Vendor.objects.all()),
+         'total_veh':len(Commodity.objects.all()),
+         'total_cat':len(Customer.objects.all()),
+            'total_exp':len(Booking.objects.all()),
+                'total_ag':len(Agent.objects.all()),
+                    'total_emp':len(Employees.objects.all()),
+    }
+    return render(request, 'employee_information/index.html',context)
+
 ##########################################   departments ###############################
 # Departments
 @login_required
